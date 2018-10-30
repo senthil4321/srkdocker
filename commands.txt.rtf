@@ -1,10 +1,10 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf600
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Monaco;\f2\fnil\fcharset0 Menlo-Regular;
-}
+\f3\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;\red242\green242\blue242;\red255\green255\blue255;\red0\green0\blue0;
-\red0\green0\blue0;\red27\green31\blue34;\red244\green246\blue249;}
+\red27\green31\blue34;\red244\green246\blue249;\red38\green38\blue38;\red179\green189\blue188;}
 {\*\expandedcolortbl;;\csgray\c95825;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c0\c0\c4706;
-\cssrgb\c0\c0\c0\c84314;\cssrgb\c14118\c16078\c18039;\cssrgb\c96471\c97255\c98039;}
+\cssrgb\c14118\c16078\c18039;\cssrgb\c96471\c97255\c98039;\cssrgb\c20000\c20000\c20000;\cssrgb\c75294\c78824\c78431\c20000;}
 \paperw11900\paperh16840\margl1440\margr1440\vieww19200\viewh8400\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -26,11 +26,10 @@ http://design.jboss.org/redhatdeveloper/marketing/docker_cheatsheet/cheatsheet/i
 
 \f2\i0\fs32 \cf0 \cb4 kubectl config current-context\
 kubectl version\
-\pard\pardeftab720\partightenfactor0
-\cf0 \cb4 kubectl get nodes\
+kubectl get nodes\
 \pard\pardeftab720\partightenfactor0
 
-\fs23\fsmilli11900 \cf6 \cb7 kubectl get pods --all-namespaces\
+\fs23\fsmilli11900 \cf5 \cb6 kubectl get pods --all-namespaces\
 \pard\pardeftab720\partightenfactor0
 
 \fs32 \cf0 \cb4 kubectl cluster-info\
@@ -38,6 +37,7 @@ kubectl port-forward
 \f1\fs36 \cf2 \cb0 \kerning1\expnd0\expndtw0 \CocoaLigature0 kubernetes-dashboard-7b9c7bc8c9-97w2f
 \f2\fs32 \cf0 \cb4 \expnd0\expndtw0\kerning0
 \CocoaLigature1  8443:8443 \'97 namespace=kube-system\
+\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
@@ -47,4 +47,35 @@ kubectl get pods\
 kubectl delete pods meshtest-deployment-567cb7c866-lrpvd\
 kubectl logs -f meshtest-deployment-567cb7c866-8f675\
 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs32 \cf0 \cb4 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf2 \cb0 \kerning1\expnd0\expndtw0 \CocoaLigature0 kubectl delete svc testv-service
+\f2\fs32 \cf0 \cb4 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+
+\f1\fs36 \cf2 \cb0 \kerning1\expnd0\expndtw0 \CocoaLigature0 kubectl exec -it meshtest-deployment-567cb7c866-8f675 /bin/sh
+\f2\fs32 \cf0 \cb4 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\pardeftab720\partightenfactor0
+\cf0 Make run\
+Make test\
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs28 \cf7 \cb8 npm install mesh-cli -g
+\f0\fs32 \cf0 \cb1 \
+
+\f3\fs28 \cf7 \cb8 mesh configure
+\f0\fs32 \cf0 \cb1 \
+
+\f3\fs28 \cf7 \cb8 mesh admin index
+\f2\fs32 \cf0 \cb4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf2 \cb0 \kerning1\expnd0\expndtw0 \CocoaLigature0 mesh admin index\
 }
