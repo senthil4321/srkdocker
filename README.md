@@ -40,12 +40,47 @@ kubectl exec -it task-pv-pod -- /bin/bash
 kubectl get pod task-pv-pod
 #Run a command inside pod
 kubectl exec -it task-pv-pod -- /bin/bash
+kubectl create -f ./cronjob.yaml
+kubectl get cronjob hello
+kubectl get jobs --watch
+kubectl delete cronjob hello
 ```
 https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
 
 [Docker Command Ref.](https://docker-curriculum.com)
 [Shell Command Shortcuts](https://stackoverflow.com/questions/9679776/how-do-i-clear-delete-the-current-line-in-terminal)
 
+
+#Kubectl auto complete
+```
+source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
+echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+```
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+#kubectl project
+```
+kubectl get pods
+kubectl exec -it meshtest-deployment-567cb7c866-6jk96 /bin/sh
+kubectl proxy
+http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+```
+###Command to update deployment
+```
+kubectl apply -f genetics-mesh.yml
+```
+###Command to delete deployment
+```
+kubectl delete deploy meshtest-deployment
+```
+###Command to delete deployment
+```
+kubectl logs meshtest-deployment-<xxx>
+```
+###Command to get pod details
+```
+kubectl get pods
+```
 
 List Example
 
@@ -76,3 +111,4 @@ List Example
 
 
 
+	
