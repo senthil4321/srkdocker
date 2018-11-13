@@ -56,11 +56,26 @@ docker rm inspect my-vol
 ```
 docker container ls
 ```
+##Docker Jenkins
+```
+docker run -p 9090:8080 -p 50000:50000 jenkins/jenkins
+####Volumen Support
+docker run -p 9090:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins
+
+```
 ##Docker Yockto
 ```
 /Users/senthilkumarramasamy/workdir
 docker run -it -v yoctovolume:/Users/senthilkumarramasamy/workdir gmacario/build-yocto
 git clone -b morty git://git.yoctoproject.org/poky.git
+```
+##Docker User Permission Yockto
+```
+$ docker run -it --rm -v yoctovolume:/workdir gmacario/build-yocto sudo chown -R build:build /workdir
+```
+##Docker copy files from container
+```
+docker cp 0bb147c4a140:/workdir/build/tmp/deploy/images/qemux86
 ```
 https://zatoichi-engineer.github.io/2017/10/02/yocto-on-osx.html
 #Kubernetes
@@ -127,19 +142,20 @@ kubectl apply -f genetics-mesh.yml
 ```
 kubectl delete deploy meshtest-deployment
 ```
-###Command to delete deployment
+###Command to get Logs
 ```
 kubectl logs meshtest-deployment-<xxx>
+kubectl logs -f meshtest-dev-deployment-f47c474b9-9r9w4 
 ```
 ###Command to get pod details
 ```
 kubectl get pods
 ```
-##delete pods
+##Delete pods
 ```
 kubectl delete pods --all
 ```
-## describe pod
+## Describe pod
 ```
 kubectl describe pod xxxx
 ```
@@ -147,7 +163,7 @@ kubectl describe pod xxxx
 ```
 kubectl delete deploy xxxx
 ```
-## describe Pod / Deployment
+## Describe Pod / Deployment
 ```
 kubectl describe deployment
 kubectl describe deployment nginx-deployment
@@ -166,6 +182,28 @@ kubectl get service
 kubectl get service frontend --watch
 kubectl get service meshtest-service --watch
 ```
+## Watch pod status continuously
+```
+kubectl get pods --watch
+```
+
+#Mesh
+###mesh configure
+```
+npm install mesh-cli -g
+mesh configure
+mesh admin index
+```
+
+#Installing Docker in EC2 Linux instace
+```
+sudo yum update -y
+sudo yum install -y docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+docker info
+```
+[https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html)
 
 List Example
 
