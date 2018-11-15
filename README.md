@@ -32,11 +32,11 @@ docker rmi $(docker images -q)
 ```
 docker run -v /Users/senthilkumarramasamy/Desktop/src/tmp/graphdb:/graphdb -v /Users/senthilkumarramasamy/Desktop/src/tmp/uploads:/uploads  -p 8080:8080 gentics/mesh```
 ```
-###docker attach to running container
+### Docker attach to running container
 ```
 docker attach adaa0e2f53df
 ```
-###docker start a container
+### Docker start a container
 ```
 docker start adaa0e2f53df
 ```
@@ -56,30 +56,59 @@ docker rm inspect my-vol
 ```
 docker container ls
 ```
-##Docker Jenkins
+### Docker run bash
+```
+docker exec -it <ID> bash
+```
+### Docker run as root user
+```
+docker run -d -u root
+```
+## Docker Jenkins
 ```
 docker run -p 9090:8080 -p 50000:50000 jenkins/jenkins
 ####Volumen Support
 docker run -p 9090:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins
-
 ```
+## Docker accessing host docker socket
+```
+docker run -p -u root 9090:8080 -p 50000:50000 -v  /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home jenkins/jenkins
+```
+[Docker Jenkins Host connection](https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci)
+
+[Running Jenkins with root user](https://stackoverflow.com/questions/44444099/how-to-solve-docker-permission-error-when-trigger-by-jenkins)
+
+[Connect Jenkins with Docker Host](https://stackoverflow.com/questions/47709208/how-to-find-docker-host-uri-to-be-used-in-jenkins-docker-plugin)
+
 ## Docker start containe automatically on system startup
 ```
 docker run -d --restart=on-failure:5 -v /media/XXX:/XXX -p 80:8080 gentics/mesh
 ```
+## Docker copy files from container
+```
+docker cp 0bb147c4a140:/workdir/build/tmp/deploy/images/qemux86
+```
+## Docker communication
+```
+docker network ls
+docker network inspect
+docker run -itd --name=container1 busybox
+docker attach container1
+docker attach container2
+ping -w3 172.17.0.3
+```
+
+[Network](https://docs.docker.com/v17.09/engine/userguide/networking/#the-default-bridge-network)
+
 ## Docker Yockto
 ```
 /Users/senthilkumarramasamy/workdir
 docker run -it -v yoctovolume:/Users/senthilkumarramasamy/workdir gmacario/build-yocto
 git clone -b morty git://git.yoctoproject.org/poky.git
 ```
-## Docker User Permission Yockto
+### Docker User Permission Yockto
 ```
-$ docker run -it --rm -v yoctovolume:/workdir gmacario/build-yocto sudo chown -R build:build /workdir
-```
-## Docker copy files from container
-```
-docker cp 0bb147c4a140:/workdir/build/tmp/deploy/images/qemux86
+docker run -it --rm -v yoctovolume:/workdir gmacario/build-yocto sudo chown -R build:build /workdir
 ```
 https://zatoichi-engineer.github.io/2017/10/02/yocto-on-osx.html
 # Kubernetes
@@ -236,9 +265,20 @@ sudo systemctl enable docker
 - EC2
 - S3
 - EBS
- 
+
+
+https://www.imperialviolet.org/2016/12/31/riscv.html
+https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-ztGLgbbeAhXE0aQKHfUjAgQQFjAAegQICRAC&url=https%3A%2F%2Fcontent.riscv.org%2Fwp-content%2Fuploads%2F2017%2F05%2Friscv-spec-v2.2.pdf&usg=AOvVaw3GMreXNki5Yuy0GlikEg51
+### Difference between pod and deplooyment
+https://stackoverflow.com/questions/41325087/in-kubernetes-what-is-the-difference-between-a-pod-and-a-deployment
+
 ---
 List Example
+
+> This is a quote example
+
+Use `git status` to list all new or modified files that haven't yet been committed.
+
 
 - One
 - Two
@@ -252,6 +292,9 @@ List Example
 2. Two
 3. Three
 
+- [x] My First task
+- [ ] My Second task
+- [ ] My Third task
 
 # Bold
 **Bold Text**
@@ -263,10 +306,6 @@ List Example
 
 ~~This is a stike through text~~
 
-https://www.imperialviolet.org/2016/12/31/riscv.html
-https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-ztGLgbbeAhXE0aQKHfUjAgQQFjAAegQICRAC&url=https%3A%2F%2Fcontent.riscv.org%2Fwp-content%2Fuploads%2F2017%2F05%2Friscv-spec-v2.2.pdf&usg=AOvVaw3GMreXNki5Yuy0GlikEg51
-### Difference between pod and deplooyment
-https://stackoverflow.com/questions/41325087/in-kubernetes-what-is-the-difference-between-a-pod-and-a-deployment
 
 
 
