@@ -64,6 +64,10 @@ docker exec -it <ID> bash
 ```
 docker run -d -u root
 ```
+### Docker Build Image
+```
+docker build -t expectedName .
+```
 ## Docker Jenkins
 ```
 docker run -p 9090:8080 -p 50000:50000 jenkins/jenkins
@@ -73,7 +77,7 @@ docker run -p 9090:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins
 ## Docker accessing host docker socket
 ```
 docker run -p -u root 9090:8080 -p 50000:50000 -v  /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home jenkins/jenkins
-```
+``` 
 [Docker Jenkins Host connection](https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci)
 
 [Running Jenkins with root user](https://stackoverflow.com/questions/44444099/how-to-solve-docker-permission-error-when-trigger-by-jenkins)
@@ -149,7 +153,6 @@ https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-vo
 [Docker Command Ref.](https://docker-curriculum.com)
 [Shell Command Shortcuts](https://stackoverflow.com/questions/9679776/how-do-i-clear-delete-the-current-line-in-terminal)
 
-
 # Kubectl auto complete
 ```
 source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
@@ -219,6 +222,16 @@ kubectl get service meshtest-service --watch
 ```
 kubectl get pods --watch
 ```
+## kubectl get name space
+```
+kubectl get namespaces
+kubectl --namespace=<insert-namespace-name-here> get pods
+kubectl get service --namespace=<insert-namespace-name-here>
+```
+## Difference between pod and deplooyment
+- [Pod and Deployment Difference](https://stackoverflow.com/questions/41325087/in-kubernetes-what-is-the-difference-between-a-pod-and-a-deployment
+) 
+
 ---
 # Mesh
 ### mesh configure
@@ -260,19 +273,36 @@ sudo systemctl enable docker
 
 /dev/sdb1    /home/yourname/mydata    ext4    defaults    0    0
 ---
+
 # AWS
+
 - Amazon Elastic Container Service 
 - EC2
 - S3
 - EBS
-
-
-https://www.imperialviolet.org/2016/12/31/riscv.html
-https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-ztGLgbbeAhXE0aQKHfUjAgQQFjAAegQICRAC&url=https%3A%2F%2Fcontent.riscv.org%2Fwp-content%2Fuploads%2F2017%2F05%2Friscv-spec-v2.2.pdf&usg=AOvVaw3GMreXNki5Yuy0GlikEg51
-### Difference between pod and deplooyment
-https://stackoverflow.com/questions/41325087/in-kubernetes-what-is-the-difference-between-a-pod-and-a-deployment
-
 ---
+
+
+# Visual Code
+    - shell command
+    - brew install gettext
+    - brew link --force gettext 
+---
+# Git 
+## Git Branch
+```
+git branch <feature_branch>
+git checkout <feature_branch>
+git push origin <feature_branch>
+```
+[git braching](https://confluence.atlassian.com/bitbucket/branching-a-repository-223217999.html)
+
+# RISC Instruction set
+- [RISCV Instruction Set](https://content.riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf)
+
+***
+
+
 List Example
 
 > This is a quote example
