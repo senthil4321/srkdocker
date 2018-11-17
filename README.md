@@ -76,7 +76,7 @@ docker run -p 9090:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins
 ```
 ## Docker accessing host docker socket
 ```
-docker run -p -u root 9090:8080 -p 50000:50000 -v  /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home jenkins/jenkins
+docker run -d -u root -p 9090:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home jenkins/jenkins
 ``` 
 [Docker Jenkins Host connection](https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci)
 
@@ -112,14 +112,25 @@ git clone -b morty git://git.yoctoproject.org/poky.git
 ```
 ### Docker User Permission Yockto
 ```
-docker run -it --rm -v yoctovolume:/workdir gmacario/build-yocto sudo chown -R build:build /workdir
+docker run -it --rm -v yoctovolume:/workdir gmacario/build-yocto 
+
+sudo chown -R build:build /workdir
+
+docker run -it --rm -v yoctovolume:/workdir yocto-srk 
+
 ```
 https://zatoichi-engineer.github.io/2017/10/02/yocto-on-osx.html
+## Docker File commands
+### CMD
+˜˜˜
+CMD "/bin/bash" 
+#command can be used only once in the docker file.
+[Tutorial](http://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/)
+˜˜˜
 # Kubernetes
 ## Kubernetes Commands
 ```
 kubectl run hello-1 --image=busybox --image-pull-policy=Never
-
 UI
 kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 kubectl proxy
@@ -335,10 +346,3 @@ Use `git status` to list all new or modified files that haven't yet been committ
 # Strike Through
 
 ~~This is a stike through text~~
-
-
-
-
-
-
-	
