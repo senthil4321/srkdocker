@@ -78,11 +78,17 @@ docker run -p 9090:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins
 ```
 docker run -d -u root -p 9090:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home jenkins/jenkins
 ``` 
+```
+docker run -d -u root -p 9090:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock --privileged -v jenkins_home:/var/jenkins_home -v $(which docker):/usr/bin/docker jenkins/jenkins
+```
 [Docker Jenkins Host connection](https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci)
 
 [Running Jenkins with root user](https://stackoverflow.com/questions/44444099/how-to-solve-docker-permission-error-when-trigger-by-jenkins)
 
 [Connect Jenkins with Docker Host](https://stackoverflow.com/questions/47709208/how-to-find-docker-host-uri-to-be-used-in-jenkins-docker-plugin)
+
+[Sample Pipeline Code](https://jenkins.io/doc/book/pipeline/docker/)
+[Docker not found error](https://forums.docker.com/t/docker-not-found-in-jenkins-pipeline/31683/14)
 
 ## Docker start containe automatically on system startup
 ```
@@ -117,16 +123,29 @@ docker run -it --rm -v yoctovolume:/workdir gmacario/build-yocto
 sudo chown -R build:build /workdir
 
 docker run -it --rm -v yoctovolume:/workdir yocto-srk 
+docker run -it --rm -v yoctovolume:/workdir yocto-srk  ./init.sh
+docker build -t yocto-srk .
 
+# TODO edit poky todo
+https://jenkins.io/doc/book/pipeline/docker/#execution-environment
+https://forums.docker.com/t/host-path-of-volume/12277/9
+https://forums.xilinx.com/t5/Embedded-Linux/petaLinux-build-linux-donot-use-bitbake-as-root-error/td-p/750023
 ```
 https://zatoichi-engineer.github.io/2017/10/02/yocto-on-osx.html
-## Docker File commands
-### CMD
-˜˜˜
+# Dockerfile commands
+## CMD
+```
 CMD "/bin/bash" 
 #command can be used only once in the docker file.
+```
 [Tutorial](http://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/)
-˜˜˜
+## Docker busybox tutorial
+```
+docker run -it --rm busybox
+set -e - exit script if any command fails (non-zero value)
+exec "$@" - will redirect input variables, see more here
+```
+
 # Kubernetes
 ## Kubernetes Commands
 ```
