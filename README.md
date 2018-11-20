@@ -27,6 +27,8 @@ docker rm $(docker ps -aq)
 ### Docker remove all images
 ```
 docker rmi $(docker images -q)
+#remove none images
+docker rmi $(docker images -f dangling=true -q)
 ```
 ### Docker mount local volume to container
 ```
@@ -144,6 +146,13 @@ CMD "/bin/bash"
 docker run -it --rm busybox
 set -e - exit script if any command fails (non-zero value)
 exec "$@" - will redirect input variables, see more here
+```
+# Docker Compose
+## Docker Compose commands
+```
+docker-compose up
+docker-compose down
+docker-compose up --build XXXX
 ```
 
 # Kubernetes
@@ -311,8 +320,20 @@ sudo systemctl enable docker
 - S3
 - EBS
 ---
+# git stash
 
-
+```
+# The changes are saved with stash and returned with stash pop. Works even when the branch is changed.
+git stash
+git stash pop
+```
+# git rename branch
+```
+git branch -m new-name
+git push origin :old-name new-name
+git push origin -u new-name
+```
+[Git rename branch](https://multiplestates.wordpress.com/2015/02/05/rename-a-local-and-remote-branch-in-git/)
 # Visual Code
     - shell command
     - brew install gettext
