@@ -50,6 +50,10 @@ docker volume create my-vol
 ```
 docker volume inspect my-vol
 ```
+### Docker get logs
+```
+docker container logs -f $(docker ps -q)
+```
 ### Docker remove Volume
 ```
 docker rm inspect my-vol
@@ -61,6 +65,7 @@ docker container ls
 ### Docker run bash
 ```
 docker exec -it <ID> bash
+docker exec -it $(docker ps -q) bash
 ```
 ### Docker run as root user
 ```
@@ -99,6 +104,7 @@ docker run -d --restart=on-failure:5 -v /media/XXX:/XXX -p 80:8080 gentics/mesh
 ## Docker copy files from container
 ```
 docker cp 0bb147c4a140:/workdir/build/tmp/deploy/images/qemux86
+https://stackoverflow.com/questions/22049212/copying-files-from-docker-container-to-host
 ```
 ## Docker communication
 ```
@@ -146,6 +152,18 @@ CMD "/bin/bash"
 docker run -it --rm busybox
 set -e - exit script if any command fails (non-zero value)
 exec "$@" - will redirect input variables, see more here
+```
+## Docker container stop restart
+```
+docker update --restart=no <CONT ID>
+--restart=unless-stopped
+docker update --restart=no  $(docker ps -aq)
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+```
+##get running container id
+```
+docker ps -alq
 ```
 # Docker Compose
 ## Docker Compose commands
@@ -278,8 +296,52 @@ kubectl get service --namespace=<insert-namespace-name-here>
 npm install mesh-cli -g
 mesh configure
 mesh admin index
+
+#URL Format
+http://127.0.0.1:8080
+```
+### Data Backup
+```
+mesh configure
+mesh admin backup
+```
+Things to backup
+  - Graph Database - automatic-backup.json
+  - Binary files - data/binaryFiles
+  - Elasticsearch Index
+
+Data file structure
+  - data
+    - binaryFiles
+    - graphdb
+  - elasticsearch   
+
+https://github.com/gentics/mesh-compose/tree/clustering#online-backup
+https://getmesh.io/docs/administration-guide/#_backup_recovery
+
+### EC2 Instance Setup
+```
+docker run -v /media/mesh-mount/backup:/backup -v /media/mesh-mount/graphdb:/graphdb -v /media/mesh-mount/uploads:/uploads  -p 80:8080 gentics/mesh
+
+docker run -d --restart=on-failure:5 -v /media/mesh-mount/backups:/backups -v /media/mesh-mount/graphdb:/graphdb -v /media/mesh-mount/uploads:/uploads  -p 80:8080 gentics/mesh
+
+#Automatic Docker startup
+sudo mkdir -p /etc/systemd/system/docker.service.d
+cd sudo  /etc/systemd/system/docker.service.d
+cd /etc/systemd/system/docker.service.d
+sudo systemctl enable docker
+
+/etc/fstab
+/dev/sdb    /media/mesh-mount/    ext4    defaults    0    0
+
 ```
 
+### Elastic Search
+```
+http://ES:9200/_cluster/health
+curl http://127.0.0.1:9200/_cluster/health
+```
+---
 # Installing Docker in EC2 Linux instace
 ```
 sudo yum update -y
@@ -287,12 +349,36 @@ sudo yum install -y docker
 sudo service docker start
 sudo usermod -a -G docker ec2-user
 docker info
+
+sudo amazon-linux-extras install docker
+sudo systemctl enable docker
+sudo usermod -a -G docker ec2-user
+#add your user (who has root privileges) to docker group
 ```
 [https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html)
 
+sudo service docker start
+
+https://docs.docker.com/install/linux/linux-postinstall/#configure-docker-to-start-on-boot
+
+```
+sudo apt-get update
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -    
+```
 # EC2 Instance Commands
 ```
 mount 
+```
+```
+private key not protected
+chmod 400 *.pem
+sudo groupadd docker
+
 ```
 ---
 # Linux Commands
@@ -308,11 +394,87 @@ sudo systemctl enable docker
 ## fstab  mount partition at startup
 
 /etc/fstab contains the necessary information to automate the process of mounting partitions.
-# device        mountpoint             fstype    options  dump   fsck
 
+## Get os version
+```
+cat /etc/os-release
+```
+
+## Linux kernel
+```
+uname -a
+```
+### device        mountpoint             fstype    options  dump   fsck
+```
 /dev/sdb1    /home/yourname/mydata    ext4    defaults    0    0
----
+```
+###
+```
+The third and fourth columns display the file's owning user and group
+ls -l
+```
+### Changing group owner
+```
+chown -R :<group> <File>
+chown -R :<group> <File>
+```
+https://www.thegeekstuff.com/2012/06/chown-examples
+AWS User and Group
+https://aws.amazon.com/premiumsupport/knowledge-center/set-change-root-linux/
+### tar file linux
+```
+tar -zcvf tar-archive-name.tar.gz source-folder-name
 
+```
+### extract tar file linux
+```
+tar -zxvf tar-archive-name.tar.gz
+```
+### SCP Copy file from remote
+```
+scp -i "xxx.pem" xxxx@xxxxx.com:/media/xxxx.tar.gz ./
+```
+### Linux USer and group permission
+```
+# get the user current user details
+id
+# group id from group name
+id -g root
+#get owning group
+stat -c %G tmp
+#get group list
+getent group
+```
+Docker User and Group
+https://medium.com/@mccode/understanding-how-uid-and-gid-work-in-docker-containers-c37a01d01cf
+Linux
+https://wiki.archlinux.org/index.php/users_and_groups
+https://fideloper.com/user-group-permissions-chmod-apache
+---
+# Postgres
+###
+```
+sudo -u <USER> createuser user
+postgres -V
+psql postgres
+CREATE ROLE user WITH LOGIN PASSWORD 'demopass'
+CREATE DATABASE xxxxx;
+grant all privileges on database demouser to "user";
+SHOW data_directory;
+ps ax | grep postgres | grep -v postgres:
+docker run -e POSTGRES_USER=demouser -e POSTGRES_PASSWORD=demopass -e POSTGRES_DB=demo library/postgres
+
+
+```
+## postgress docker start
+https://stackoverflow.com/questions/37694987/connecting-to-postgresql-in-a-docker-container-from-outside
+
+### Insert data in table
+```
+INSERT INTO table(column1, column2, …)
+VALUES
+ (value1, value2, …);
+```
 # AWS
 
 - Amazon Elastic Container Service 
@@ -320,24 +482,12 @@ sudo systemctl enable docker
 - S3
 - EBS
 ---
-# git stash
-
-```
-# The changes are saved with stash and returned with stash pop. Works even when the branch is changed.
-git stash
-git stash pop
-```
-# git rename branch
-```
-git branch -m new-name
-git push origin :old-name new-name
-git push origin -u new-name
-```
 [Git rename branch](https://multiplestates.wordpress.com/2015/02/05/rename-a-local-and-remote-branch-in-git/)
 # Visual Code
     - shell command
     - brew install gettext
-    - brew link --force gettext 
+    - brew link --force gettext
+     
 ---
 # Git 
 ## Git Branch
@@ -345,14 +495,54 @@ git push origin -u new-name
 git branch <feature_branch>
 git checkout <feature_branch>
 git push origin <feature_branch>
+git push --set-upstream origin <feature_branch>
 ```
+## Git Stash
+```
+git stash show -p stash@{0} | git apply -R
+```
+## git Stash POP
+```
+# The changes are saved with stash and returned with stash pop. Works even when the branch is changed.
+git stash
+git stash pop
+git stash pop is git stash apply && git stash drop
+```
+## Git Stash to Branch
+```
+git stash branch <name>
+```
+## git rename branch
+```
+git branch -m new-name
+git push origin :old-name new-name
+git push origin -u new-name
+```
+
 [git braching](https://confluence.atlassian.com/bitbucket/branching-a-repository-223217999.html)
 
 # RISC Instruction set
 - [RISCV Instruction Set](https://content.riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf)
 
-***
 
+# Python3 mac
+```
+brew install python3
+pip install virtualenv
+virtualenv srkpython3
+source srkpython3/bin/activate
+pip install Django 
+```
+***
+# openssl certificate generation
+### 
+```
+openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem
+openssl x509 -text -noout -in cert.pem
+``` 
+
+# English 
+text excerpt
 
 List Example
 
