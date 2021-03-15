@@ -12,6 +12,11 @@ docker run busybox sleep 10 ; echo demo
 while sleep 1; do echo "Hi"; done
 while true; do echo 'Hit CTRL+C'; sleep 1; done
 ```
+### Docker list all images
+```bash
+docker image ls
+docker images
+```
 ### Docker list all container
 ```
 docker ps -aq
@@ -420,9 +425,13 @@ ls -l
 chown -R :<group> <File>
 chown -R :<group> <File>
 ```
-https://www.thegeekstuff.com/2012/06/chown-examples
-AWS User and Group
-https://aws.amazon.com/premiumsupport/knowledge-center/set-change-root-linux/
+#### Ref.
+
+* https://www.thegeekstuff.com/2012/06/chown-examples
+---
+### AWS User and Group
+* https://aws.amazon.com/premiumsupport/knowledge-center/set-change-root-linux/
+
 ### tar file linux
 ```
 tar -zcvf tar-archive-name.tar.gz source-folder-name
@@ -447,13 +456,13 @@ stat -c %G tmp
 #get group list
 getent group
 ```
-Docker User and Group
-https://medium.com/@mccode/understanding-how-uid-and-gid-work-in-docker-containers-c37a01d01cf
-Linux
-https://wiki.archlinux.org/index.php/users_and_groups
-https://fideloper.com/user-group-permissions-chmod-apache
+### Docker User and Group
+* https://medium.com/@mccode/understanding-how-uid-and-gid-work-in-docker-containers-c37a01d01cf
+## Linux
+* https://wiki.archlinux.org/index.php/users_and_groups
+* https://fideloper.com/user-group-permissions-chmod-apache
 ---
-# Postgres
+## Postgres
 ###
 ```
 sudo -u <USER> createuser user
