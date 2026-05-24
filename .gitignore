@@ -1,0 +1,11 @@
+# Binaries
+kubectl
+minikube-linux-amd64
+
+# Environment / secrets
+.env
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
