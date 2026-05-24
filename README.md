@@ -1,4 +1,31 @@
 # srkdocker
+
+A reference project for Docker, Kubernetes, Jenkins, Go, and DevOps tooling.
+
+## Project Structure
+
+```
+srkdocker/
+├── docker/
+│   ├── busybox/        # Dockerfile: prints a greeting using ENV variable
+│   └── script/         # Dockerfile: runs init.sh entrypoint script
+├── go/
+│   └── hello.go        # Simple Go hello-world program
+├── jenkins-conf/
+│   └── yocto.conf      # Jenkins pipeline for Yocto build in Docker
+├── k8s/
+│   ├── deployment.yaml  # Nginx deployment (4 replicas)
+│   ├── pstestpod.yaml   # Pod with persistent volume mount
+│   ├── psvclaim.yaml    # PersistentVolumeClaim (1Gi)
+│   ├── psvolume.yaml    # PersistentVolume (1Gi, hostPath)
+│   └── jobs/
+│       └── cornjobs.yaml # CronJob: prints hello every minute
+├── Prometheus.md        # Prometheus monitoring notes
+└── README.md
+```
+
+---
+
 ## Docker Commands
 ```console
 export PS1=" "
@@ -61,7 +88,7 @@ docker container logs -f $(docker ps -q)
 ```
 ### Docker remove Volume
 ```
-docker rm inspect my-vol
+docker volume rm my-vol
 ```
 ### Docker list container
 ```
@@ -181,38 +208,83 @@ docker-compose up --build XXXX
 1. https://docs.docker.com/engine/security/security/
 ***
 # Kubernetes
-## Kubernetes Commands
+
+## Quick Start (Minikube)
+
+### Install kubectl
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
 ```
+
+### Install and Start Minikube
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install -o root -g root -m 0755 minikube-linux-amd64 /usr/local/bin/minikube
+minikube start --driver=docker
+minikube status
+```
+
+### Deploy this project
+```bash
+# Apply all k8s configs
+kubectl apply -f k8s/
+
+# Check status
+kubectl get pods
+kubectl get pv,pvc
+kubectl get cronjobs
+```
+
+## Kubernetes Commands
+```bash
 kubectl run hello-1 --image=busybox --image-pull-policy=Never
-UI
+```
+
+### Kubernetes Dashboard
+```bash
 kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 kubectl proxy
-http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/
-https://medium.com/google-cloud/kubernetes-101-pods-nodes-containers-and-clusters-c1509e409e16
-```
-Quoting text with markdown
-> This is an example of quoting text with markdown.
-This is an example of quoting code
-```
-echo helloworld
+# Open: http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 ```
 
-# Creating Persist Volume
-```
-kubectl create -f psvolume.yaml
+References:
+- https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/
+- https://medium.com/google-cloud/kubernetes-101-pods-nodes-containers-and-clusters-c1509e409e16
+
+## k8s/ — Manifests in this Repo
+
+| File | Kind | Description |
+|---|---|---|
+| `deployment.yaml` | Deployment | Runs 4 replicas of `nginx:1.8` on port 80 |
+| `psvolume.yaml` | PersistentVolume | 1Gi hostPath volume, storageClass `manual` |
+| `psvclaim.yaml` | PersistentVolumeClaim | Claims 1Gi from `manual` storage class |
+| `pstestpod.yaml` | Pod | Nginx pod mounting PVC at `/usr/share/nginx/html` |
+| `jobs/cornjobs.yaml` | CronJob | Runs busybox every minute, prints date + hello message |
+
+> **Note:** `jobs/cornjobs.yaml` uses deprecated `batch/v1beta1` — update to `batch/v1` for Kubernetes 1.25+.
+> `psvolume.yaml` contains a Mac-specific hostPath — update to a valid Linux path before applying.
+
+## Creating Persistent Volume
+```bash
+kubectl create -f k8s/psvolume.yaml
 kubectl get pv task-pv-volume
-kubectl exec -it task-pv-pod -- /bin/bash
+kubectl create -f k8s/psvclaim.yaml
+kubectl get pvc task-pv-claim
+kubectl create -f k8s/pstestpod.yaml
 kubectl get pod task-pv-pod
-#Run a command inside pod
 kubectl exec -it task-pv-pod -- /bin/bash
-kubectl create -f ./cronjob.yaml
+```
+Reference: https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+
+## CronJob
+```bash
+kubectl create -f k8s/jobs/cornjobs.yaml
 kubectl get cronjob hello
 kubectl get jobs --watch
 kubectl delete cronjob hello
 ```
-https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
 
 [Docker Command Ref.](https://docker-curriculum.com)
 [Shell Command Shortcuts](https://stackoverflow.com/questions/9679776/how-do-i-clear-delete-the-current-line-in-terminal)
